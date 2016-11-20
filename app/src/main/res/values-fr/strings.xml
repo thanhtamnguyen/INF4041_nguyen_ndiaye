@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mon Application</string>
+    <string name="choice1">Choix 1</string>
+    <string name="choice2">Choix 2</string>
+    <string name="choice3">Choix 3</string>
+    <string name="list_name">Ma List</string>
+    <string-array name="list_item">
+        <item>Bleu</item>
+        <item>Rouge</item>
+        <item>Jaune</item>
+        <item>Vert</item>
+        <item>Violet</item>
+    </string-array>
+</resources>

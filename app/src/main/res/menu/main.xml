@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/choice1"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Choice 1"/>
+    <item
+        android:id="@+id/choice2"
+        android:icon="@android:drawable/ic_input_delete"
+        android:title="Choice 2"/>
+    <item
+        android:id="@+id/choice3"
+        android:icon="@android:drawable/ic_input_get"
+        android:title="Choice 3"/>
+
+</menu>

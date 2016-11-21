@@ -3,14 +3,13 @@
     <item
         android:id="@+id/choice1"
         android:icon="@android:drawable/ic_input_add"
-        android:title="Choice 1"/>
+        android:title="@string/choice1" />
     <item
         android:id="@+id/choice2"
         android:icon="@android:drawable/ic_input_delete"
-        android:title="Choice 2"/>
+        android:title="@string/choice3" />
     <item
         android:id="@+id/choice3"
         android:icon="@android:drawable/ic_input_get"
-        android:title="Choice 3"/>
-
+        android:title="@string/choice2" />
 </menu>

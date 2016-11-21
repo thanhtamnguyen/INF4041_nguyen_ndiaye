@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -205,16 +206,31 @@ public class MainActivity extends AppCompatActivity {
                 textViewView = (TextView) itemView.findViewById(R.id.rv_obj_element_name);
                 imageViewView = (ImageView) itemView.findViewById(R.id.rv_obj_element_image);
             }
-            public void bind(JSONObject json_obj){
+            public void bind(final JSONObject json_obj){
                 /*
                  * Set all elements in view
                  */
                 try {
                     Log.d(TAG, new String("\nbind method"));
-                    textViewView.setText(json_obj.getString("image"));
-                    String urlImage = "http://epic.gsfc.nasa.gov/epic-archive/jpg/"+json_obj.getString("image")+".jpg";
+                    textViewView.setText(json_obj.getString("date"));
+                    final String urlImage = "http://epic.gsfc.nasa.gov/epic-archive/jpg/"+json_obj.getString("image")+".jpg";
                     //Bitmap bitmap = new DownloadImage(urlImage).getBitmap();
+                    final String urlBigImage = "http://epic.gsfc.nasa.gov/epic-archive/png/"+json_obj.getString("image")+".png";
                     Picasso.with(getBaseContext()).load(urlImage).into(imageViewView);
+                    imageViewView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(MainActivity.this, SecondActivity.class);
+                            try {
+                                i.putExtra("caption", String.valueOf(json_obj.getString("caption")));
+                                i.putExtra("url_img", String.valueOf(urlImage));
+                                i.putExtra("date", String.valueOf(json_obj.getString("date")));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            startActivity(i);
+                        }
+                    });
                     //imageViewView.setImageBitmap(bitmap);
                 } catch (JSONException e) {
                     e.printStackTrace();

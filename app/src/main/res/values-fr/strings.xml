@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Mon Application</string>
+    <string name="dl_file_notif">Fichier téléchargé</string>
     <string name="choice1">Choix 1</string>
     <string name="choice2">Choix 2</string>
     <string name="choice3">Choix 3</string>

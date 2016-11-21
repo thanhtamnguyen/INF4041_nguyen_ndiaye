@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*
+
         final Button bList = (Button) findViewById(R.id.buttonNew);
         bList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(i);
             }
-        });*/
+        });
 
         /*
          * Download File service
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
          * RecyclerView Definition
          */
         rv = (RecyclerView) findViewById(R.id.rv_obj);
-        rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
 
         // create ObjectAdapter and fill RecyclerView
         rv.setAdapter(new ObjectAdapter(jsonArray));
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
              */
             try {
                 JSONObject j = this.obj.getJSONObject(position);
+                // call bind() function
                 holder.bind(j);
                 Log.d(TAG, new String("\nSetText done"));
             } catch (JSONException e) {
@@ -188,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
              * Translate view element into java object
              */
             public TextView textViewView;
+            public ImageView imageViewView;
 
             public ObjectHolder(View itemView) {
                 /*
@@ -197,10 +203,19 @@ public class MainActivity extends AppCompatActivity {
 
                 // update the graphic element
                 textViewView = (TextView) itemView.findViewById(R.id.rv_obj_element_name);
+                imageViewView = (ImageView) itemView.findViewById(R.id.rv_obj_element_image);
             }
             public void bind(JSONObject json_obj){
+                /*
+                 * Set all elements in view
+                 */
                 try {
-                    textViewView.setText(json_obj.getString("name"));
+                    Log.d(TAG, new String("\nbind method"));
+                    textViewView.setText(json_obj.getString("image"));
+                    String urlImage = "http://epic.gsfc.nasa.gov/epic-archive/jpg/"+json_obj.getString("image")+".jpg";
+                    //Bitmap bitmap = new DownloadImage(urlImage).getBitmap();
+                    Picasso.with(getBaseContext()).load(urlImage).into(imageViewView);
+                    //imageViewView.setImageBitmap(bitmap);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -97,8 +97,8 @@ public class GetBiersService extends IntentService {
         URL url = null;
         try{
             Log.d(TAG, new String("try connection"));
-            url = new URL("http://binouze.fabrigli.fr/bieres.json");
-            //url = new URL("https://api.nasa.gov/EPIC/api/v1.0/images.php?date=2015-10-31&api_key=DEMO_KEY");
+            //url = new URL("http://binouze.fabrigli.fr/bieres.json");
+            url = new URL("https://api.nasa.gov/EPIC/api/v1.0/images.php?date=2015-10-31&api_key=DEMO_KEY");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="dl_file_notif">File Dowloaded</string>
     <string name="choice1">Choice 1</string>
     <string name="choice2">Choice 2</string>
     <string name="choice3">Choice 3</string>

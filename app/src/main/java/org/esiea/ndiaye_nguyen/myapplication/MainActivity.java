@@ -2,12 +2,12 @@ package org.esiea.ndiaye_nguyen.myapplication;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +35,7 @@ import java.io.InputStream;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Main Activity";
+    private static final String TAG_RV = "RecyclerView Holder";
     public static final String BIERES_UPDATE = "com.octip.cours.inf4042_11.BIERE_UPDATE";
     private RecyclerView rv;
 
@@ -44,26 +44,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button bList = (Button) findViewById(R.id.buttonNew);
-        bList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, SecondActivity.class);
-                startActivity(i);
-            }
-        });
-
         /*
          * Download File service
-         */
+        */
         GetBiersService.startActionBiers(this);
+
+        //throw an intent to signal an update
+        //and filter the intent
         IntentFilter intentFilter = new IntentFilter(BIERES_UPDATE);
-        LocalBroadcastManager.getInstance(this).registerReceiver(new BierUpdate(), intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new DataUpdate(), intentFilter);
+
 
         JSONArray jsonArray = getBiersFromFile();
+
         /*
          * RecyclerView Definition
-         */
+        */
         rv = (RecyclerView) findViewById(R.id.rv_obj);
         rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
 
@@ -71,23 +67,35 @@ public class MainActivity extends AppCompatActivity {
         rv.setAdapter(new ObjectAdapter(jsonArray));
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);//Menu Resource, Menu
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.choice1:
-                Toast.makeText(getApplicationContext(),getString(R.string.choice1), Toast.LENGTH_LONG).show();
+            case R.id.site_url:
+                String url = "http://epic.gsfc.nasa.gov/";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
                 return true;
-            case R.id.choice2:
-                Toast.makeText(getApplicationContext(),getString(R.string.choice2), Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.choice3:
-                Toast.makeText(getApplicationContext(),getString(R.string.choice3), Toast.LENGTH_LONG).show();
+            case R.id.box:
+                AlertDialog.Builder my_box;
+                my_box = new AlertDialog.Builder(this);
+                my_box.setTitle(R.string.box_title);
+
+                my_box.setMessage(R.string.box_msg);
+                my_box.setCancelable(true);
+                my_box.setNegativeButton(R.string.box_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Lorsque l'on cliquera sur yes, on quittera l'application
+                        MainActivity.this.finish();
+                    } });
+                my_box.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -96,26 +104,20 @@ public class MainActivity extends AppCompatActivity {
 
     public JSONArray getBiersFromFile(){
         try{
-            InputStream input = new FileInputStream(getCacheDir()+"/"+"bieres.json");
+            InputStream input = new FileInputStream(getCacheDir()+"/"+"my_data.json");
             byte[] buffer = new byte[input.available()];
             input.read(buffer);
             input.close();
-
             JSONArray jsonArray = new JSONArray(new String(buffer, "UTF-8"));
-            //Log.d(TAG, new String("reading done"));
-            Toast.makeText(this,"Reading Done in getBiersFromFile", Toast.LENGTH_LONG).show();
-
+            Log.d(TAG, "Convert to Json Array done");
             try {
-                Log.i(MainActivity.class.getName(),
-                        "Number of entries " + jsonArray.length());
+                Log.i(MainActivity.class.getName(),"Number of entries " + jsonArray.length());
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    //Log.i(MainActivity.class.getName(), jsonObject.getString("name"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Toast.makeText(this,"Return JsonArray", Toast.LENGTH_LONG).show();
             return jsonArray;
         }catch(IOException e){
             e.printStackTrace();
@@ -129,15 +131,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class BierUpdate extends BroadcastReceiver {
+    private class DataUpdate extends BroadcastReceiver {
         /*
          * Sub-Class displaying notification
          */
-        private static final String TAG = "MyActivity";
+        private static final String TAG = "DL Activity";
         @Override
         public void onReceive(Context context, Intent intent){
-            //Log.d(TAG, getIntent().getAction());
-            Toast.makeText(context,"Bier Update Done", Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"Data Update Done", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -170,10 +171,8 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject j = this.obj.getJSONObject(position);
                 // call bind() function
                 holder.bind(j);
-                Log.d(TAG, new String("\nSetText done"));
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.d(TAG, new String("\nNo Elem for this key"));
             }
         }
 
@@ -211,16 +210,18 @@ public class MainActivity extends AppCompatActivity {
                  * Set all elements in view
                  */
                 try {
-                    Log.d(TAG, new String("\nbind method"));
+                    //Log.d(TAG_RV, "https://epic.gsfc.nasa.gov/archive/natural/2015/12/20/png/"+json_obj.getString("image")+".png");
                     textViewView.setText(json_obj.getString("date"));
-                    final String urlImage = "http://epic.gsfc.nasa.gov/epic-archive/jpg/"+json_obj.getString("image")+".jpg";
-                    //Bitmap bitmap = new DownloadImage(urlImage).getBitmap();
-                    final String urlBigImage = "http://epic.gsfc.nasa.gov/epic-archive/png/"+json_obj.getString("image")+".png";
-                    Picasso.with(getBaseContext()).load(urlImage).into(imageViewView);
+
+                    //final String urlImage = "https://epic.gsfc.nasa.gov/epic-archive/jpg/"+json_obj.getString("image")+".jpg";
+                    final String urlImage = "https://epic.gsfc.nasa.gov/archive/natural/2015/12/20/png/"+json_obj.getString("image")+".png";
+                    Log.d(TAG_RV, urlImage);
+                    //final String urlImage = "http://apod.nasa.gov/apod/image/ngc6240_keel_big.gif";
+                    Picasso.with(imageViewView.getContext()).load(urlImage).into(imageViewView);
                     imageViewView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(MainActivity.this, SecondActivity.class);
+                            Intent i = new Intent(MainActivity.this, DetailActivity.class);
                             try {
                                 i.putExtra("caption", String.valueOf(json_obj.getString("caption")));
                                 i.putExtra("url_img", String.valueOf(urlImage));
@@ -238,6 +239,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }

@@ -15,6 +15,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -83,7 +85,9 @@ public class GetBiersService extends IntentService {
             }
             out.close();
             in.close();
-        }catch(Exception e){
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -96,15 +100,21 @@ public class GetBiersService extends IntentService {
         Log.d(TAG, "Thread Service Name "+Thread.currentThread().getName());
         URL url = null;
         try{
-            Log.d(TAG, new String("try connection"));
             //url = new URL("http://binouze.fabrigli.fr/bieres.json");
-            url = new URL("https://api.nasa.gov/EPIC/api/v1.0/images.php?date=2015-10-31&api_key=DEMO_KEY");
+            //url = new URL("https://api.nasa.gov/EPIC/api/v1.0/images.php?date=2016-01-18&api_key=ds4IfokeWfMlYlkO501q6h4rC8haqCLL3X8okZ8W");
+            url = new URL("http://epic.gsfc.nasa.gov/api/natural/date/2015-12-20");
+            //url = new URL("https://api.nasa.gov/planetary/apod?date=1995-12-28&hd=false&api_key=ds4IfokeWfMlYlkO501q6h4rC8haqCLL3X8okZ8W");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
             connection.connect();
             if(HttpURLConnection.HTTP_OK == connection.getResponseCode()){
-                copyInputStreamToFile(connection.getInputStream(), new File(getCacheDir(), "bieres.json"));
-                Log.d(TAG, "Biers downloaded");
+                Log.d(TAG, "HTTP response Ok");
+                //copyInputStreamToFile(connection.getInputStream(), new File(getCacheDir(), "bieres.json"));
+                //copyInputStreamToFile(connection.getInputStream(), new File(getCacheDir(), "data_day.json"));
+                copyInputStreamToFile(connection.getInputStream(), new File(getCacheDir(), "my_data.json"));
+                Log.d(TAG, "Data downloaded");
+            }else{
+                Log.d(TAG, "HTTP response NOT ok");
+                Log.d(TAG, connection.getResponseCode()+"");
             }
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.BIERES_UPDATE));
 

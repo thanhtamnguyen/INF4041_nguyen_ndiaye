@@ -228,9 +228,9 @@ public class MainActivity extends AppCompatActivity {
                     textViewView.setText(json_obj.getString("date"));
 
                     //final String urlImage = "https://epic.gsfc.nasa.gov/epic-archive/jpg/"+json_obj.getString("image")+".jpg";
-                    final String urlImage = "https://epic.gsfc.nasa.gov/archive/natural/2015/12/20/png/"+json_obj.getString("image")+".png";
+                    final String urlImage = "http://epic.gsfc.nasa.gov/archive/natural/2015/12/20/jpg/"+json_obj.getString("image")+".jpg";
+                    //final String urlImage = "http://apod.nasa.gov/apod/image/1512/spritenight_iss_4256.jpg";
                     Log.d(TAG_RV, urlImage);
-                    //final String urlImage = "http://apod.nasa.gov/apod/image/ngc6240_keel_big.gif";
                     Picasso.with(imageViewView.getContext()).load(urlImage).into(imageViewView);
                     imageViewView.setOnClickListener(new View.OnClickListener() {
                         @Override

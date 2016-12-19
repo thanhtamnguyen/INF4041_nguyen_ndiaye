@@ -17,17 +17,17 @@
         android:text="@string/welcome"
         android:textAlignment="center"/>
 
-    <Button
+    <!--<Button
         android:id="@+id/buttonNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textHello"
-        android:text="@string/textHello" />
+        android:text="@string/button_url" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_obj"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonNew">
+        android:layout_below="@id/textHello">
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

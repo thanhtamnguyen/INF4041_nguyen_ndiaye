@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="welcome">Welcome</string>
+    <string name="app_name">Earth Photos</string>
+    <string name="welcome">Day: December 20th, 2015</string>
+
+    <string name="detail_img_desc">Nasa Photo</string>
     <string name="textHello">Hello World</string>
     <string name="dl_file_notif">File Dowloaded</string>
-    <string name="choice1">Choice 1</string>
+    <string name="button_favorite">Favorite</string>
+    <string name="button_url">EPIC Official Site</string>
+
+    <string name="db_text">Dialog Text</string>
+    <string name="bar_site">EPIC Official Site</string>
+    <string name="bar_ask">Quit</string>
+
+    <string name="box_title">Quit</string>
+    <string name="box_msg">Do you want to quit the application?</string>
+    <string name="box_yes">Yes</string>
+    <string name="box_no">No</string>
+
+
     <string name="choice2">Choice 2</string>
     <string name="choice3">Choice 3</string>
     <string name="list_name">My List</string>

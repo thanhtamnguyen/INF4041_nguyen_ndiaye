@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/choice1"
+        android:id="@+id/site_url"
         android:icon="@android:drawable/ic_input_add"
-        android:title="@string/choice1" />
+        android:title="@string/bar_site" />
     <item
-        android:id="@+id/choice2"
-        android:icon="@android:drawable/ic_input_delete"
-        android:title="@string/choice3" />
-    <item
-        android:id="@+id/choice3"
-        android:icon="@android:drawable/ic_input_get"
-        android:title="@string/choice2" />
+        android:id="@+id/box"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/bar_ask" />
 </menu>

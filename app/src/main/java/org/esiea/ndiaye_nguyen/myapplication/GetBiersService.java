@@ -103,17 +103,14 @@ public class GetBiersService extends IntentService {
             //url = new URL("http://binouze.fabrigli.fr/bieres.json");
             //url = new URL("https://api.nasa.gov/EPIC/api/v1.0/images.php?date=2016-01-18&api_key=ds4IfokeWfMlYlkO501q6h4rC8haqCLL3X8okZ8W");
             url = new URL("http://epic.gsfc.nasa.gov/api/natural/date/2015-12-20");
-            //url = new URL("https://api.nasa.gov/planetary/apod?date=1995-12-28&hd=false&api_key=ds4IfokeWfMlYlkO501q6h4rC8haqCLL3X8okZ8W");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
             if(HttpURLConnection.HTTP_OK == connection.getResponseCode()){
                 Log.d(TAG, "HTTP response Ok");
-                //copyInputStreamToFile(connection.getInputStream(), new File(getCacheDir(), "bieres.json"));
-                //copyInputStreamToFile(connection.getInputStream(), new File(getCacheDir(), "data_day.json"));
                 copyInputStreamToFile(connection.getInputStream(), new File(getCacheDir(), "my_data.json"));
                 Log.d(TAG, "Data downloaded");
             }else{
-                Log.d(TAG, "HTTP response NOT ok");
+                Log.d(TAG, "HTTP response not ok");
                 Log.d(TAG, connection.getResponseCode()+"");
             }
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.BIERES_UPDATE));

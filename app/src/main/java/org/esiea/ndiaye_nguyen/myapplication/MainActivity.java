@@ -35,6 +35,7 @@ import java.io.InputStream;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Main Activity";
+    private static final String TAG_JSON = "JSON File";
     private static final String TAG_RV = "RecyclerView Holder";
     public static final String BIERES_UPDATE = "com.octip.cours.inf4042_11.BIERE_UPDATE";
     private RecyclerView rv;
@@ -60,12 +61,13 @@ public class MainActivity extends AppCompatActivity {
         /*
          * RecyclerView Definition
         */
+        /*
         rv = (RecyclerView) findViewById(R.id.rv_obj);
         rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
 
         // create ObjectAdapter and fill RecyclerView
         rv.setAdapter(new ObjectAdapter(jsonArray));
-
+        */
     }
 
     @Override
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             input.read(buffer);
             input.close();
             JSONArray jsonArray = new JSONArray(new String(buffer, "UTF-8"));
-            Log.d(TAG, "Convert to Json Array done");
+            Log.d(TAG_JSON, "Convert to Json Array done");
             try {
                 Log.i(MainActivity.class.getName(),"Number of entries " + jsonArray.length());
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -121,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
             return jsonArray;
         }catch(IOException e){
             e.printStackTrace();
-            Log.d(TAG, "ioexception");
+            Log.d(TAG_JSON, "ioexception");
             return new JSONArray();
         }catch(Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "exception");
+            Log.d(TAG_JSON, "exception");
             return new JSONArray();
 
         }
@@ -139,6 +141,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent){
             Toast.makeText(context,"Data Update Done", Toast.LENGTH_LONG).show();
+
+            /*
+             * RecyclerView Definition
+            */
+            rv = (RecyclerView) findViewById(R.id.rv_obj);
+            rv.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));
+
+            // reads file and puts datas into jsonArray
+            JSONArray jsonArray = getBiersFromFile();
+
+            // create ObjectAdapter and fill RecyclerView
+            rv.setAdapter(new ObjectAdapter(jsonArray));
         }
 
     }
